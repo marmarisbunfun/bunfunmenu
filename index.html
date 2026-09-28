@@ -333,34 +333,44 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    // r[0]: Kat TR, r[1]: Ad TR, r[2]: Açıklama TR, r[3]: Fiyat, r[4]: Durum
-                    // r[5]: Kat EN, r[6]: Ad EN, r[7]: Açıklama EN
-                    // r[8]: Kat RU, r[9]: Ad RU, r[10]: Açıklama RU, r[11]: Resim
                     let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
                     if (status === 'pasif') continue;
 
+                    let catTr = r[0];
+                    let nameTr = r[1];
+                    let descTr = r[2] || "";
                     let price = r[3] ? r[3] + " TL" : "";
-                    let img = r[11] || "";
+                    
+                    // Görsel sütununu otomatik bulma (Hangi sütunda olursa olsun dolu olanı alır)
+                    let img = "";
+                    for (let col = 11; col < r.length; col++) {
+                        if (r[col] && r[col].toString().trim() !== "") {
+                            img = r[col].toString().trim();
+                            break;
+                        }
+                    }
+                    // Eğer 11. sütunda yoksa genel standart yerlere bak
+                    if (!img && r[11]) img = r[11];
 
-                    // Türkçe
-                    if (r[0] && r[1]) {
-                        if (!trCats[r[0]]) trCats[r[0]] = [];
-                        trCats[r[0]].push({ name: r[1], desc: r[2] || "", price: price, image: img });
-                    }
-                    // İngilizce (Boşsa Türkçe yedek)
-                    let cEn = r[5] || r[0];
-                    let nEn = r[6] || r[1];
-                    if (cEn && nEn) {
-                        if (!enCats[cEn]) enCats[cEn] = [];
-                        enCats[cEn].push({ name: nEn, desc: r[7] || r[2] || "", price: price, image: img });
-                    }
-                    // Rusça (Boşsa Türkçe yedek)
-                    let cRu = r[8] || r[0];
-                    let nRu = r[9] || r[1];
-                    if (cRu && nRu) {
-                        if (!ruCats[cRu]) ruCats[cRu] = [];
-                        ruCats[cRu].push({ name: nRu, desc: r[10] || r[2] || "", price: price, image: img });
-                    }
+                    if (!catTr || !nameTr) continue;
+
+                    // Türkçe ekle
+                    if (!trCats[catTr]) trCats[catTr] = [];
+                    trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
+
+                    // İngilizce (Tabloda varsa İngilizce, yoksa Türkçe yedek)
+                    let catEn = r[5] || catTr;
+                    let nameEn = r[6] || nameTr;
+                    let descEn = r[7] || descTr;
+                    if (!enCats[catEn]) enCats[catEn] = [];
+                    enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
+
+                    // Rusça (Tabloda varsa Rusça, yoksa Türkçe yedek)
+                    let catRu = r[8] || catTr;
+                    let nameRu = r[9] || nameTr;
+                    let descRu = r[10] || descTr;
+                    if (!ruCats[catRu]) ruCats[catRu] = [];
+                    ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
 
                 const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
