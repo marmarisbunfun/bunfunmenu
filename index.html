@@ -324,9 +324,8 @@
         async function loadMenuData() {
             if (isDataLoaded) return;
             try {
-                let response = await fetch(window.location.href);
-                let text = await response.text();
-                let rows = JSON.parse(text);
+                let response = await fetch('menu.json?' + new Date().getTime());
+                let rows = await response.json();
 
                 if (!rows || rows.length < 2) return;
 
@@ -334,10 +333,9 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    // r[0]: Kategori TR, r[1]: Ad TR, r[2]: Açıklama TR, r[3]: Fiyat, r[4]: Durum
-                    // r[5]: Kategori EN, r[6]: Ad EN, r[7]: Açıklama EN
-                    // r[8]: Kategori RU, r[9]: Ad RU, r[10]: Açıklama RU
-                    // r[11]: Görsel URL/Path
+                    // r[0]: Kat TR, r[1]: Ad TR, r[2]: Açıklama TR, r[3]: Fiyat, r[4]: Durum
+                    // r[5]: Kat EN, r[6]: Ad EN, r[7]: Açıklama EN
+                    // r[8]: Kat RU, r[9]: Ad RU, r[10]: Açıklama RU, r[11]: Resim
                     let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
                     if (status === 'pasif') continue;
 
@@ -349,14 +347,14 @@
                         if (!trCats[r[0]]) trCats[r[0]] = [];
                         trCats[r[0]].push({ name: r[1], desc: r[2] || "", price: price, image: img });
                     }
-                    // İngilizce (Eğer İngilizce sütun boşsa Türkçe yedek kullanılır)
+                    // İngilizce (Boşsa Türkçe yedek)
                     let cEn = r[5] || r[0];
                     let nEn = r[6] || r[1];
                     if (cEn && nEn) {
                         if (!enCats[cEn]) enCats[cEn] = [];
                         enCats[cEn].push({ name: nEn, desc: r[7] || r[2] || "", price: price, image: img });
                     }
-                    // Rusça (Eğer Rusça sütun boşsa Türkçe yedek kullanılır)
+                    // Rusça (Boşsa Türkçe yedek)
                     let cRu = r[8] || r[0];
                     let nRu = r[9] || r[1];
                     if (cRu && nRu) {
@@ -386,7 +384,6 @@
         async function selectLanguage(lang) {
             currentLang = lang;
             
-            // Eğer veriler henüz çekilmediyse arka planda yükle
             if (!isDataLoaded) {
                 await loadMenuData();
             }
