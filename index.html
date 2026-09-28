@@ -242,6 +242,12 @@
             font-weight: 700;
             color: #c73729;
         }
+        .loading-screen {
+            text-align: center;
+            padding: 40px;
+            font-size: 16px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
@@ -274,7 +280,9 @@
                 <button class="back-btn" onclick="goToPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button>
             </div>
             <div class="section-title" id="txt-cat-title">Kategoriler</div>
-            <div id="category-container" class="category-grid"></div>
+            <div id="category-container" class="category-grid">
+                <div class="loading-screen">Menü yükleniyor...</div>
+            </div>
         </div>
 
         <!-- 3. Ürünler Ekranı -->
@@ -305,6 +313,7 @@
         let menuData = { tr: { categories: [] }, en: { categories: [] }, ru: { categories: [] } };
         let currentLang = 'tr';
         let currentCatIndex = 0;
+        let isDataLoaded = false;
 
         const uiTexts = {
             tr: { backLang: "Dil Seçimi", backCat: "Kategoriler", backProd: "Ürünlere Dön", catTitle: "Kategoriler", soonText: "Görseller Çok Yakında" },
@@ -312,7 +321,8 @@
             ru: { backLang: "Язык", backCat: "Категории", backProd: "Назад к товарам", catTitle: "Категории", soonText: "Фото скоро будут" }
         };
 
-        async function initMenu() {
+        async function loadMenuData() {
+            if (isDataLoaded) return;
             try {
                 let response = await fetch(window.location.href);
                 let text = await response.text();
@@ -324,11 +334,11 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    // Tablo sütun sırasına göre: 
-                    // 0: Cat(TR), 1: Name(TR), 2: Desc(TR), 3: Price, 4: Status, 
-                    // 5: Cat(EN), 6: Name(EN), 7: Desc(EN), 
-                    // 8: Cat(RU), 9: Name(RU), 10: Desc(RU), 11: Image
-                    let status = r[4] ? r[4].toString().toLowerCase() : '';
+                    // r[0]: Kategori TR, r[1]: Ad TR, r[2]: Açıklama TR, r[3]: Fiyat, r[4]: Durum
+                    // r[5]: Kategori EN, r[6]: Ad EN, r[7]: Açıklama EN
+                    // r[8]: Kategori RU, r[9]: Ad RU, r[10]: Açıklama RU
+                    // r[11]: Görsel URL/Path
+                    let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
                     if (status === 'pasif') continue;
 
                     let price = r[3] ? r[3] + " TL" : "";
@@ -339,17 +349,19 @@
                         if (!trCats[r[0]]) trCats[r[0]] = [];
                         trCats[r[0]].push({ name: r[1], desc: r[2] || "", price: price, image: img });
                     }
-                    // İngilizce
-                    if (r[5] && r[6]) {
-                        let cEn = r[5] || r[0];
+                    // İngilizce (Eğer İngilizce sütun boşsa Türkçe yedek kullanılır)
+                    let cEn = r[5] || r[0];
+                    let nEn = r[6] || r[1];
+                    if (cEn && nEn) {
                         if (!enCats[cEn]) enCats[cEn] = [];
-                        enCats[cEn].push({ name: r[6], desc: r[7] || "", price: price, image: img });
+                        enCats[cEn].push({ name: nEn, desc: r[7] || r[2] || "", price: price, image: img });
                     }
-                    // Rusça
-                    if (r[8] && r[9]) {
-                        let cRu = r[8] || r[0];
+                    // Rusça (Eğer Rusça sütun boşsa Türkçe yedek kullanılır)
+                    let cRu = r[8] || r[0];
+                    let nRu = r[9] || r[1];
+                    if (cRu && nRu) {
                         if (!ruCats[cRu]) ruCats[cRu] = [];
-                        ruCats[cRu].push({ name: r[9], desc: r[10] || "", price: price, image: img });
+                        ruCats[cRu].push({ name: nRu, desc: r[10] || r[2] || "", price: price, image: img });
                     }
                 }
 
@@ -358,9 +370,9 @@
                 menuData.tr.categories = formatObj(trCats);
                 menuData.en.categories = formatObj(enCats);
                 menuData.ru.categories = formatObj(ruCats);
-
+                isDataLoaded = true;
             } catch (e) {
-                console.error("Veri yüklenirken hata:", e);
+                console.error("Veri işlenirken hata:", e);
             }
         }
 
@@ -373,8 +385,10 @@
 
         async function selectLanguage(lang) {
             currentLang = lang;
-            if (menuData[lang].categories.length === 0) {
-                await initMenu();
+            
+            // Eğer veriler henüz çekilmediyse arka planda yükle
+            if (!isDataLoaded) {
+                await loadMenuData();
             }
 
             const t = uiTexts[lang];
@@ -392,6 +406,11 @@
             container.innerHTML = '';
 
             const cats = menuData[currentLang].categories;
+            if (!cats || cats.length === 0) {
+                container.innerHTML = `<div class="loading-screen">Kategori bulunamadı.</div>`;
+                return;
+            }
+
             cats.forEach((cat, index) => {
                 const card = document.createElement('div');
                 card.className = 'category-card';
