@@ -329,46 +329,89 @@
 
                 if (!rows || rows.length < 2) return;
 
+                // Tablonun ilk satırını başlık olarak alıyoruz ki sütun yerleri değişse bile bulabilelim
+                let headers = rows[0].map(h => h ? h.toString().toLowerCase().trim() : "");
+                
+                // Sütun indekslerini akıllıca tespit etme
+                let getColIndex = (keywords) => {
+                    for (let keyword of keywords) {
+                        let idx = headers.findIndex(h => h.includes(keyword));
+                        if (idx !== -1) return idx;
+                    }
+                    return -1;
+                };
+
+                // Türkçe sütunlar
+                let iCatTr = getColIndex(["kategori", "category"]);
+                let iNameTr = getColIndex(["ad", "ürün", "name", "urun"]);
+                let iDescTr = getColIndex(["açıklama", "aciklama", "desc"]);
+                let iPrice = getColIndex(["fiyat", "price"]);
+                let iStatus = getColIndex(["durum", "status"]);
+                let iImg = getColIndex(["görsel", "gorsel", "image", "foto", "resim"]);
+
+                // İngilizce sütunlar
+                let iCatEn = getColIndex(["en kategori", "category (en)", "english category"]);
+                let iNameEn = getColIndex(["en ad", "name (en)", "english name"]);
+                let iDescEn = getColIndex(["en açıklama", "desc (en)", "english desc"]);
+
+                // Rusça sütunlar
+                let iCatRu = getColIndex(["ru kategori", "category (ru)", "russian category"]);
+                let iNameRu = getColIndex(["ru ad", "name (ru)", "russian name"]);
+                let iDescRu = getColIndex(["ru açıklama", "desc (ru)", "russian desc"]);
+
+                // Eğer sütunlar başlık eşleşmezse eski sabit indekslere yedekle
+                if (iCatTr === -1) iCatTr = 0;
+                if (iNameTr === -1) iNameTr = 1;
+                if (iDescTr === -1) iDescTr = 2;
+                if (iPrice === -1) iPrice = 3;
+                if (iStatus === -1) iStatus = 4;
+                if (iImg === -1) iImg = 11;
+
                 let trCats = {}, enCats = {}, ruCats = {};
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
-                    if (status === 'pasif') continue;
+                    let status = iStatus !== -1 && r[iStatus] ? r[iStatus].toString().toLowerCase().trim() : '';
+                    if (status === 'pasif' || status === 'passive') continue;
 
-                    let catTr = r[0];
-                    let nameTr = r[1];
-                    let descTr = r[2] || "";
-                    let price = r[3] ? r[3] + " TL" : "";
-                    
-                    // Görsel sütununu otomatik bulma (Hangi sütunda olursa olsun dolu olanı alır)
-                    let img = "";
-                    for (let col = 11; col < r.length; col++) {
-                        if (r[col] && r[col].toString().trim() !== "") {
-                            img = r[col].toString().trim();
-                            break;
-                        }
-                    }
-                    // Eğer 11. sütunda yoksa genel standart yerlere bak
-                    if (!img && r[11]) img = r[11];
-
+                    let catTr = r[iCatTr] ? r[iCatTr].toString().trim() : "";
+                    let nameTr = r[iNameTr] ? r[iNameTr].toString().trim() : "";
                     if (!catTr || !nameTr) continue;
 
-                    // Türkçe ekle
+                    let descTr = iDescTr !== -1 && r[iDescTr] ? r[iDescTr].toString().trim() : "";
+                    let price = iPrice !== -1 && r[iPrice] ? r[iPrice].toString().trim() + " TL" : "";
+                    
+                    // Görsel yolunu bulma (boş değilse alır)
+                    let img = "";
+                    if (iImg !== -1 && r[iImg]) {
+                        img = r[iImg].toString().trim();
+                    }
+                    if (!img) {
+                        // Eğer standart sütunda yoksa satırdaki herhangi bir resim uzantılı alanı tara
+                        for (let c = 0; c < r.length; c++) {
+                            let val = r[c] ? r[c].toString().trim() : "";
+                            if (val.includes("images/") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg")) {
+                                img = val;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Türkçe veri ekle
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // İngilizce (Tabloda varsa İngilizce, yoksa Türkçe yedek)
-                    let catEn = r[5] || catTr;
-                    let nameEn = r[6] || nameTr;
-                    let descEn = r[7] || descTr;
+                    // İngilizce veri ekle (Varsa İngilizce, yoksa Türkçe yedek)
+                    let catEn = (iCatEn !== -1 && r[iCatEn]) ? r[iCatEn].toString().trim() : catTr;
+                    let nameEn = (iNameEn !== -1 && r[iNameEn]) ? r[iNameEn].toString().trim() : nameTr;
+                    let descEn = (iDescEn !== -1 && r[iDescEn]) ? r[iDescEn].toString().trim() : descTr;
                     if (!enCats[catEn]) enCats[catEn] = [];
                     enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // Rusça (Tabloda varsa Rusça, yoksa Türkçe yedek)
-                    let catRu = r[8] || catTr;
-                    let nameRu = r[9] || nameTr;
-                    let descRu = r[10] || descTr;
+                    // Rusça veri ekle (Varsa Rusça, yoksa Türkçe yedek)
+                    let catRu = (iCatRu !== -1 && r[iCatRu]) ? r[iCatRu].toString().trim() : catTr;
+                    let nameRu = (iNameRu !== -1 && r[iNameRu]) ? r[iNameRu].toString().trim() : nameTr;
+                    let descRu = (iDescRu !== -1 && r[iDescRu]) ? r[iDescRu].toString().trim() : descTr;
                     if (!ruCats[catRu]) ruCats[catRu] = [];
                     ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
