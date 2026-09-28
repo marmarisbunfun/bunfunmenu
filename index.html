@@ -18,143 +18,449 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 20px;
         }
         header {
+            background-color: #f5f5f0;
+            padding: 25px 15px;
             text-align: center;
-            margin-bottom: 30px;
+            border-bottom: 1px solid #e0e0dc;
         }
-        h1 {
+        .header-brand {
+            font-size: 28px;
+            font-weight: 700;
+            color: #c73729;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        .slogan {
             font-family: 'Great Vibes', cursive;
-            font-size: 3.5rem;
-            color: #b22222;
-            margin-bottom: 5px;
+            font-size: 26px;
+            color: #ee8e00;
         }
-        p.subtitle {
-            font-size: 1rem;
-            color: #666;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        #menu-container {
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
             width: 100%;
-            max-width: 800px;
+            flex-grow: 1;
         }
-        .category-title {
-            font-size: 1.5rem;
+        
+        .page {
+            display: none !important;
+        }
+        .page.active {
+            display: block !important;
+        }
+
+        #page-language.active {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 60vh;
+        }
+
+        .lang-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 280px;
+        }
+        .lang-btn {
+            background-color: #ffffff;
+            border: 2px solid #c73729;
+            color: #c73729;
+            padding: 14px 20px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .lang-btn span.flag {
+            font-size: 22px;
+        }
+        .lang-btn:hover {
+            background-color: #c73729;
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+        .back-bar {
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            background: none;
+            border: none;
+            color: #c73729;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 15px;
             color: #222;
-            margin: 25px 0 15px 0;
-            border-bottom: 2px solid #b22222;
-            padding-bottom: 5px;
-            text-transform: uppercase;
         }
-        .menu-item {
-            background: #ffffff;
-            padding: 15px 20px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .category-card {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: transform 0.2s;
+            border-left: 5px solid #c73729;
         }
-        .item-details h3 {
-            font-size: 1.1rem;
-            color: #111;
-            margin-bottom: 4px;
+        .category-card:hover {
+            transform: scale(1.01);
         }
-        .item-details p {
-            font-size: 0.85rem;
-            color: #777;
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .item-price {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #b22222;
-            white-space: nowrap;
-            margin-left: 15px;
+        .product-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
         }
-        .loading {
+        .product-card:hover {
+            transform: translateY(-2px);
+        }
+        .product-thumb {
+            width: 75px;
+            height: 75px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #eaeaea;
+            flex-shrink: 0;
+        }
+        .product-thumb-placeholder {
+            width: 75px;
+            height: 75px;
+            border-radius: 8px;
+            background-color: #e5e5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             text-align: center;
-            font-size: 1.2rem;
-            color: #555;
-            margin-top: 50px;
+            font-size: 10px;
+            color: #777;
+            font-weight: 600;
+            padding: 4px;
+            flex-shrink: 0;
+            line-height: 1.2;
+        }
+        .product-info {
+            flex-grow: 1;
+        }
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #222;
+            margin-bottom: 2px;
+        }
+        .product-desc-preview {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .product-price {
+            font-size: 15px;
+            font-weight: 700;
+            color: #c73729;
+        }
+        .detail-box {
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .detail-img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            background-color: #eaeaea;
+            margin-bottom: 20px;
+        }
+        .detail-img-placeholder {
+            width: 100%;
+            height: 180px;
+            border-radius: 12px;
+            background-color: #e5e5e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .detail-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 10px;
+        }
+        .detail-desc {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .detail-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #c73729;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>BUN & FUN</h1>
-        <p class="subtitle">Dijital Menü</p>
+        <div class="header-brand">BUN & FUN BURGER</div>
+        <div class="slogan">fun in every bite</div>
     </header>
 
-    <div id="menu-container">
-        <div class="loading">Menü yükleniyor...</div>
+    <div class="container" id="main-container">
+        
+        <!-- 1. Dil Seçim Ekranı -->
+        <div id="page-language" class="page active">
+            <div class="lang-buttons">
+                <button class="lang-btn" onclick="selectLanguage('tr')">
+                    <span class="flag">🇹🇷</span> Türkçe
+                </button>
+                <button class="lang-btn" onclick="selectLanguage('en')">
+                    <span class="flag">🇬🇧</span> English
+                </button>
+                <button class="lang-btn" onclick="selectLanguage('ru')">
+                    <span class="flag">🇷🇺</span> Русский
+                </button>
+            </div>
+        </div>
+
+        <!-- 2. Kategoriler Ekranı -->
+        <div id="page-categories" class="page">
+            <div class="back-bar">
+                <button class="back-btn" onclick="goToPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button>
+            </div>
+            <div class="section-title" id="txt-cat-title">Kategoriler</div>
+            <div id="category-container" class="category-grid"></div>
+        </div>
+
+        <!-- 3. Ürünler Ekranı -->
+        <div id="page-products" class="page">
+            <div class="back-bar">
+                <button class="back-btn" onclick="goToPage('page-categories')">← <span id="txt-back-cat">Kategoriler</span></button>
+            </div>
+            <div class="section-title" id="product-section-title">Ürünler</div>
+            <div id="product-container" class="product-list"></div>
+        </div>
+
+        <!-- 4. Ürün Detay Ekranı -->
+        <div id="page-detail" class="page">
+            <div class="back-bar">
+                <button class="back-btn" onclick="backToProducts()">← <span id="txt-back-prod">Ürünlere Dön</span></button>
+            </div>
+            <div class="detail-box">
+                <div id="detail-img-container"></div>
+                <h2 id="detail-title" class="detail-title">Ürün Adı</h2>
+                <p id="detail-desc" class="detail-desc">Açıklama</p>
+                <div id="detail-price" class="detail-price">0 TL</div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        // Google Sheets verisini doğrudan okuyan script
-        async function loadMenu() {
+        let menuData = { tr: { categories: [] }, en: { categories: [] }, ru: { categories: [] } };
+        let currentLang = 'tr';
+        let currentCatIndex = 0;
+
+        const uiTexts = {
+            tr: { backLang: "Dil Seçimi", backCat: "Kategoriler", backProd: "Ürünlere Dön", catTitle: "Kategoriler", soonText: "Görseller Çok Yakında" },
+            en: { backLang: "Language", backCat: "Categories", backProd: "Back to Products", catTitle: "Categories", soonText: "Photos Coming Soon" },
+            ru: { backLang: "Язык", backCat: "Категории", backProd: "Назад к товарам", catTitle: "Категории", soonText: "Фото скоро будут" }
+        };
+
+        async function initMenu() {
             try {
-                // index.html'in içindeki ham JSON verisini çekiyoruz
                 let response = await fetch(window.location.href);
                 let text = await response.text();
-                
-                // Eğer veri dizi formatındaysa parse et
                 let rows = JSON.parse(text);
-                
-                let container = document.getElementById('menu-container');
-                container.innerHTML = '';
-                
-                if (!rows || rows.length < 2) {
-                    container.innerHTML = '<div class="loading">Menü içeriği henüz boş.</div>';
-                    return;
-                }
 
-                // Başlık satırını atlayarak verileri döngüye alıyoruz
-                let currentCategory = '';
-                let html = '';
+                if (!rows || rows.length < 2) return;
+
+                let trCats = {}, enCats = {}, ruCats = {};
 
                 for (let i = 1; i < rows.length; i++) {
-                    let row = rows[i];
-                    let category = row[0]; // Kategori (TR)
-                    let name = row[1];     // Adı (TR)
-                    let desc = row[2];     // Açıklama (TR)
-                    let price = row[3];    // Fiyat
-                    let status = row[4];   // Durum
+                    let r = rows[i];
+                    // Tablo sütun sırasına göre: 
+                    // 0: Cat(TR), 1: Name(TR), 2: Desc(TR), 3: Price, 4: Status, 
+                    // 5: Cat(EN), 6: Name(EN), 7: Desc(EN), 
+                    // 8: Cat(RU), 9: Name(RU), 10: Desc(RU), 11: Image
+                    let status = r[4] ? r[4].toString().toLowerCase() : '';
+                    if (status === 'pasif') continue;
 
-                    if (!name) continue;
+                    let price = r[3] ? r[3] + " TL" : "";
+                    let img = r[11] || "";
 
-                    // Eğer pasifse veya satır boşsa atla
-                    if (status && status.toLowerCase() === 'pasif') continue;
-
-                    if (category !== currentCategory) {
-                        currentCategory = category;
-                        html += `<div class="category-title">${currentCategory}</div>`;
+                    // Türkçe
+                    if (r[0] && r[1]) {
+                        if (!trCats[r[0]]) trCats[r[0]] = [];
+                        trCats[r[0]].push({ name: r[1], desc: r[2] || "", price: price, image: img });
                     }
-
-                    html += `
-                        <div class="menu-item">
-                            <div class="item-details">
-                                <h3>${name}</h3>
-                                <p>${desc || ''}</p>
-                            </div>
-                            <div class="item-price">${price} TL</div>
-                        </div>
-                    `;
+                    // İngilizce
+                    if (r[5] && r[6]) {
+                        let cEn = r[5] || r[0];
+                        if (!enCats[cEn]) enCats[cEn] = [];
+                        enCats[cEn].push({ name: r[6], desc: r[7] || "", price: price, image: img });
+                    }
+                    // Rusça
+                    if (r[8] && r[9]) {
+                        let cRu = r[8] || r[0];
+                        if (!ruCats[cRu]) ruCats[cRu] = [];
+                        ruCats[cRu].push({ name: r[9], desc: r[10] || "", price: price, image: img });
+                    }
                 }
 
-                container.innerHTML = html;
+                const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
+
+                menuData.tr.categories = formatObj(trCats);
+                menuData.en.categories = formatObj(enCats);
+                menuData.ru.categories = formatObj(ruCats);
 
             } catch (e) {
-                console.error(e);
-                document.getElementById('menu-container').innerHTML = '<div class="loading">Menü yüklenirken bir hata oluştu. Lütfen sayfayı yenileyin.</div>';
+                console.error("Veri yüklenirken hata:", e);
             }
         }
 
-        loadMenu();
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) targetPage.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        async function selectLanguage(lang) {
+            currentLang = lang;
+            if (menuData[lang].categories.length === 0) {
+                await initMenu();
+            }
+
+            const t = uiTexts[lang];
+            document.getElementById('txt-back-lang').innerText = t.backLang;
+            document.getElementById('txt-back-cat').innerText = t.backCat;
+            document.getElementById('txt-back-prod').innerText = t.backProd;
+            document.getElementById('txt-cat-title').innerText = t.catTitle;
+
+            renderCategories();
+            goToPage('page-categories');
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('category-container');
+            container.innerHTML = '';
+
+            const cats = menuData[currentLang].categories;
+            cats.forEach((cat, index) => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.innerHTML = `<span>${cat.name}</span> <span>→</span>`;
+                card.onclick = () => openCategory(index);
+                container.appendChild(card);
+            });
+        }
+
+        function openCategory(catIndex) {
+            currentCatIndex = catIndex;
+            const cat = menuData[currentLang].categories[catIndex];
+            const t = uiTexts[currentLang];
+            document.getElementById('product-section-title').innerText = cat.name;
+
+            const container = document.getElementById('product-container');
+            container.innerHTML = '';
+
+            cat.products.forEach((prod) => {
+                const pCard = document.createElement('div');
+                pCard.className = 'product-card';
+
+                let thumbHtml = prod.image && prod.image.trim() !== "" ? 
+                    `<img class="product-thumb" src="${prod.image}" alt="${prod.name}">` : 
+                    `<div class="product-thumb-placeholder">${t.soonText}</div>`;
+
+                pCard.innerHTML = `
+                    ${thumbHtml}
+                    <div class="product-info">
+                        <div class="product-name">${prod.name}</div>
+                        <div class="product-desc-preview">${prod.desc}</div>
+                        <div class="product-price">${prod.price}</div>
+                    </div>
+                `;
+                pCard.onclick = () => openProductDetail(prod);
+                container.appendChild(pCard);
+            });
+
+            goToPage('page-products');
+        }
+
+        function backToProducts() {
+            openCategory(currentCatIndex);
+        }
+
+        function openProductDetail(prod) {
+            const containerEl = document.getElementById('detail-img-container');
+            const t = uiTexts[currentLang];
+            containerEl.innerHTML = '';
+
+            if (prod.image && prod.image.trim() !== "") {
+                const imgEl = document.createElement('img');
+                imgEl.className = 'detail-img';
+                imgEl.src = prod.image;
+                imgEl.alt = prod.name;
+                containerEl.appendChild(imgEl);
+            } else {
+                const placeholderEl = document.createElement('div');
+                placeholderEl.className = 'detail-img-placeholder';
+                placeholderEl.innerText = t.soonText;
+                containerEl.appendChild(placeholderEl);
+            }
+
+            document.getElementById('detail-title').innerText = prod.name;
+            document.getElementById('detail-desc').innerText = prod.desc;
+            document.getElementById('detail-price').innerText = prod.price;
+
+            goToPage('page-detail');
+        }
     </script>
 </body>
 </html>
