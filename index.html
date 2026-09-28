@@ -6,245 +6,41 @@
     <title>BUN & FUN - Dijital Menü</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background-color: #f5f5f0;
-            color: #333333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-        header {
-            background-color: #f5f5f0;
-            padding: 25px 15px;
-            text-align: center;
-            border-bottom: 1px solid #e0e0dc;
-        }
-        .header-brand {
-            font-size: 28px;
-            font-weight: 700;
-            color: #c73729;
-            letter-spacing: 1px;
-            margin-bottom: 2px;
-        }
-        .slogan {
-            font-family: 'Great Vibes', cursive;
-            font-size: 26px;
-            color: #ee8e00;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            width: 100%;
-            flex-grow: 1;
-        }
-        .page {
-            display: none !important;
-        }
-        .page.active {
-            display: block !important;
-        }
-        #page-language.active {
-            display: flex !important;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 60vh;
-        }
-        .lang-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            width: 100%;
-            max-width: 280px;
-        }
-        .lang-btn {
-            background-color: #ffffff;
-            border: 2px solid #c73729;
-            color: #c73729;
-            padding: 14px 20px;
-            font-size: 17px;
-            font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        .lang-btn span.flag {
-            font-size: 22px;
-        }
-        .lang-btn:hover {
-            background-color: #c73729;
-            color: #ffffff;
-            transform: translateY(-2px);
-        }
-        .back-bar {
-            margin-bottom: 20px;
-        }
-        .back-btn {
-            background: none;
-            border: none;
-            color: #c73729;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: #222;
-        }
-        .category-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        .category-card {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-            cursor: pointer;
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: transform 0.2s;
-            border-left: 5px solid #c73729;
-        }
-        .category-card:hover {
-            transform: scale(1.01);
-        }
-        .product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .product-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-            transition: transform 0.2s;
-        }
-        .product-card:hover {
-            transform: translateY(-2px);
-        }
-        .product-thumb {
-            width: 75px;
-            height: 75px;
-            border-radius: 8px;
-            object-fit: cover;
-            background-color: #eaeaea;
-            flex-shrink: 0;
-        }
-        .product-thumb-placeholder {
-            width: 75px;
-            height: 75px;
-            border-radius: 8px;
-            background-color: #e5e5e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 10px;
-            color: #777;
-            font-weight: 600;
-            padding: 4px;
-            flex-shrink: 0;
-            line-height: 1.2;
-        }
-        .product-info {
-            flex-grow: 1;
-        }
-        .product-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 2px;
-        }
-        .product-desc-preview {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 6px;
-            line-height: 1.4;
-        }
-        .product-price {
-            font-size: 15px;
-            font-weight: 700;
-            color: #c73729;
-        }
-        .detail-box {
-            background-color: #ffffff;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        .detail-img {
-            width: 100%;
-            max-height: 250px;
-            object-fit: cover;
-            border-radius: 12px;
-            background-color: #eaeaea;
-            margin-bottom: 20px;
-        }
-        .detail-img-placeholder {
-            width: 100%;
-            height: 180px;
-            border-radius: 12px;
-            background-color: #e5e5e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: #666;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-        .detail-title {
-            font-size: 22px;
-            font-weight: 700;
-            color: #222;
-            margin-bottom: 10px;
-        }
-        .detail-desc {
-            font-size: 15px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .detail-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: #c73729;
-        }
-        .loading-screen {
-            text-align: center;
-            padding: 40px;
-            font-size: 16px;
-            color: #666;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background-color: #f5f5f0; color: #333333; min-height: 100vh; display: flex; flex-direction: column; }
+        header { background-color: #f5f5f0; padding: 25px 15px; text-align: center; border-bottom: 1px solid #e0e0dc; }
+        .header-brand { font-size: 28px; font-weight: 700; color: #c73729; letter-spacing: 1px; margin-bottom: 2px; }
+        .slogan { font-family: 'Great Vibes', cursive; font-size: 26px; color: #ee8e00; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; width: 100%; flex-grow: 1; }
+        .page { display: none !important; }
+        .page.active { display: block !important; }
+        #page-language.active { display: flex !important; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
+        .lang-buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 280px; }
+        .lang-btn { background-color: #ffffff; border: 2px solid #c73729; color: #c73729; padding: 14px 20px; font-size: 17px; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center; gap: 12px; }
+        .lang-btn span.flag { font-size: 22px; }
+        .lang-btn:hover { background-color: #c73729; color: #ffffff; transform: translateY(-2px); }
+        .back-bar { margin-bottom: 20px; }
+        .back-btn { background: none; border: none; color: #c73729; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        .section-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #222; }
+        .category-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .category-card { background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); cursor: pointer; font-size: 18px; font-weight: 600; color: #333; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; border-left: 5px solid #c73729; }
+        .category-card:hover { transform: scale(1.01); }
+        .product-list { display: flex; flex-direction: column; gap: 12px; }
+        .product-card { background-color: #ffffff; border-radius: 12px; padding: 12px; display: flex; gap: 15px; align-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s; }
+        .product-card:hover { transform: translateY(-2px); }
+        .product-thumb { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; background-color: #eaeaea; flex-shrink: 0; }
+        .product-thumb-placeholder { width: 75px; height: 75px; border-radius: 8px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; color: #777; font-weight: 600; padding: 4px; flex-shrink: 0; line-height: 1.2; }
+        .product-info { flex-grow: 1; }
+        .product-name { font-size: 16px; font-weight: 600; color: #222; margin-bottom: 2px; }
+        .product-desc-preview { font-size: 13px; color: #666; margin-bottom: 6px; line-height: 1.4; }
+        .product-price { font-size: 15px; font-weight: 700; color: #c73729; }
+        .detail-box { background-color: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
+        .detail-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; background-color: #eaeaea; margin-bottom: 20px; }
+        .detail-img-placeholder { width: 100%; height: 180px; border-radius: 12px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #666; font-weight: 600; margin-bottom: 20px; }
+        .detail-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 10px; }
+        .detail-desc { font-size: 15px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+        .detail-price { font-size: 24px; font-weight: 700; color: #c73729; }
+        .loading-screen { text-align: center; padding: 40px; font-size: 16px; color: #666; }
     </style>
 </head>
 <body>
@@ -255,47 +51,28 @@
     </header>
 
     <div class="container" id="main-container">
-        
-        <!-- 1. Dil Seçim Ekranı -->
         <div id="page-language" class="page active">
             <div class="lang-buttons">
-                <button class="lang-btn" onclick="selectLanguage('tr')">
-                    <span class="flag">🇹🇷</span> Türkçe
-                </button>
-                <button class="lang-btn" onclick="selectLanguage('en')">
-                    <span class="flag">🇬🇧</span> English
-                </button>
-                <button class="lang-btn" onclick="selectLanguage('ru')">
-                    <span class="flag">🇷🇺</span> Русский
-                </button>
+                <button class="lang-btn" onclick="selectLanguage('tr')"><span class="flag">🇹🇷</span> Türkçe</button>
+                <button class="lang-btn" onclick="selectLanguage('en')"><span class="flag">🇬🇧</span> English</button>
+                <button class="lang-btn" onclick="selectLanguage('ru')"><span class="flag">🇷🇺</span> Русский</button>
             </div>
         </div>
 
-        <!-- 2. Kategoriler Ekranı -->
         <div id="page-categories" class="page">
-            <div class="back-bar">
-                <button class="back-btn" onclick="goToPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button>
-            </div>
+            <div class="back-bar"><button class="back-btn" onclick="goToPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button></div>
             <div class="section-title" id="txt-cat-title">Kategoriler</div>
-            <div id="category-container" class="category-grid">
-                <div class="loading-screen">Menü yükleniyor...</div>
-            </div>
+            <div id="category-container" class="category-grid"><div class="loading-screen">Menü yükleniyor...</div></div>
         </div>
 
-        <!-- 3. Ürünler Ekranı -->
         <div id="page-products" class="page">
-            <div class="back-bar">
-                <button class="back-btn" onclick="goToPage('page-categories')">← <span id="txt-back-cat">Kategoriler</span></button>
-            </div>
+            <div class="back-bar"><button class="back-btn" onclick="goToPage('page-categories')">← <span id="txt-back-cat">Kategoriler</span></button></div>
             <div class="section-title" id="product-section-title">Ürünler</div>
             <div id="product-container" class="product-list"></div>
         </div>
 
-        <!-- 4. Ürün Detay Ekranı -->
         <div id="page-detail" class="page">
-            <div class="back-bar">
-                <button class="back-btn" onclick="backToProducts()">← <span id="txt-back-prod">Ürünlere Dön</span></button>
-            </div>
+            <div class="back-bar"><button class="back-btn" onclick="backToProducts()">← <span id="txt-back-prod">Ürünlere Dön</span></button></div>
             <div class="detail-box">
                 <div id="detail-img-container"></div>
                 <h2 id="detail-title" class="detail-title">Ürün Adı</h2>
@@ -303,7 +80,6 @@
                 <div id="detail-price" class="detail-price">0 TL</div>
             </div>
         </div>
-
     </div>
 
     <script>
@@ -321,7 +97,9 @@
         async function loadMenuData() {
             if (isDataLoaded) return;
             try {
-                let response = await fetch('menu.json?' + new Date().getTime());
+                const webAppUrl = "https://script.google.com/macros/s/AKfycbyUSbF5vt1KdwsqbBCgeALbfsIcKErG5_0lY6fuYV5NUpgIP_9ij-6Zpcn1cPZYbY5D/exec";
+                
+                let response = await fetch(webAppUrl);
                 let rows = await response.json();
 
                 if (!rows || rows.length < 2) return;
@@ -331,49 +109,38 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     
-                    // Pasif ürün kontrolü (Durum sütunu)
-                    let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
+                    let status = (r[4] || "").toString().toLowerCase().trim();
                     if (status === 'pasif' || status === 'passive') continue;
 
-                    // Türkçe Veriler (0: Kategori, 1: Ad, 2: Açıklama)
-                    let catTr = r[0] ? r[0].toString().trim() : "";
-                    let nameTr = r[1] ? r[1].toString().trim() : "";
+                    let catTr = (r[0] || "").toString().trim();
+                    let nameTr = (r[1] || "").toString().trim();
                     if (!catTr || !nameTr) continue;
-                    let descTr = r[2] ? r[2].toString().trim() : "";
-                    
-                    // Fiyat (3. Sütun)
-                    let price = r[3] ? r[3].toString().trim() : "";
+
+                    let descTr = (r[2] || "").toString().trim();
+                    let price = (r[3] || "").toString().trim();
                     if (price && !price.includes("TL") && !price.includes("₺")) price += " TL";
 
-                    // Görsel (Satırda resim linki içeren sütunu bul)
-                    let img = "";
-                    for (let c = 0; c < r.length; c++) {
-                        let val = r[c] ? r[c].toString().trim() : "";
-                        if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg") || val.endsWith(".webp")) {
-                            img = val;
-                            break;
-                        }
-                    }
+                    let img = (r[11] || "").toString().trim();
 
-                    // İngilizce Veriler (Tabloda EN sütunları varsa onları al, yoksa Türkçe yedek)
-                    let nameEn = (r[5] && r[5].toString().trim() !== "") ? r[5].toString().trim() : nameTr;
-                    let descEn = (r[6] && r[6].toString().trim() !== "") ? r[6].toString().trim() : descTr;
+                    let catEn = (r[5] || "").toString().trim() || catTr;
+                    let nameEn = (r[6] || "").toString().trim() || nameTr;
+                    let descEn = (r[7] || "").toString().trim() || descTr;
 
-                    // Rusça Veriler (Tabloda RU sütunları varsa onları al, yoksa Türkçe yedek)
-                    let nameRu = (r[8] && r[8].toString().trim() !== "") ? r[8].toString().trim() : nameTr;
-                    let descRu = (r[9] && r[9].toString().trim() !== "") ? r[9].toString().trim() : descTr;
+                    let catRu = (r[8] || "").toString().trim() || catTr;
+                    let nameRu = (r[9] || "").toString().trim() || nameTr;
+                    let descRu = (r[10] || "").toString().trim() || descTr;
 
-                    // 1. TÜRKÇE MENÜ
+                    // TR
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // 2. İNGİLİZCE MENÜ
-                    if (!enCats[catTr]) enCats[catTr] = [];
-                    enCats[catTr].push({ name: nameEn, desc: descEn, price: price, image: img });
+                    // EN
+                    if (!enCats[catEn]) enCats[catEn] = [];
+                    enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // 3. RUSÇA MENÜ
-                    if (!ruCats[catTr]) ruCats[catTr] = [];
-                    ruCats[catTr].push({ name: nameRu, desc: descRu, price: price, image: img });
+                    // RU
+                    if (!ruCats[catRu]) ruCats[catRu] = [];
+                    ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
 
                 const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
@@ -383,7 +150,7 @@
                 menuData.ru.categories = formatObj(ruCats);
                 isDataLoaded = true;
             } catch (e) {
-                console.error("Veri işlenirken hata:", e);
+                console.error("Veri çekme hatası:", e);
             }
         }
 
@@ -396,10 +163,7 @@
 
         async function selectLanguage(lang) {
             currentLang = lang;
-            
-            if (!isDataLoaded) {
-                await loadMenuData();
-            }
+            if (!isDataLoaded) await loadMenuData();
 
             const t = uiTexts[lang];
             document.getElementById('txt-back-lang').innerText = t.backLang;
@@ -414,13 +178,11 @@
         function renderCategories() {
             const container = document.getElementById('category-container');
             container.innerHTML = '';
-
             const cats = menuData[currentLang].categories;
             if (!cats || cats.length === 0) {
                 container.innerHTML = `<div class="loading-screen">Kategori bulunamadı.</div>`;
                 return;
             }
-
             cats.forEach((cat, index) => {
                 const card = document.createElement('div');
                 card.className = 'category-card';
@@ -442,7 +204,6 @@
             cat.products.forEach((prod) => {
                 const pCard = document.createElement('div');
                 pCard.className = 'product-card';
-
                 let thumbHtml = prod.image && prod.image.trim() !== "" ? 
                     `<img class="product-thumb" src="${prod.image}" alt="${prod.name}">` : 
                     `<div class="product-thumb-placeholder">${t.soonText}</div>`;
@@ -458,13 +219,10 @@
                 pCard.onclick = () => openProductDetail(prod);
                 container.appendChild(pCard);
             });
-
             goToPage('page-products');
         }
 
-        function backToProducts() {
-            openCategory(currentCatIndex);
-        }
+        function backToProducts() { openCategory(currentCatIndex); }
 
         function openProductDetail(prod) {
             const containerEl = document.getElementById('detail-img-container');
@@ -487,7 +245,6 @@
             document.getElementById('detail-title').innerText = prod.name;
             document.getElementById('detail-desc').innerText = prod.desc;
             document.getElementById('detail-price').innerText = prod.price;
-
             goToPage('page-detail');
         }
     </script>
