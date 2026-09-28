@@ -44,14 +44,12 @@
             width: 100%;
             flex-grow: 1;
         }
-        
         .page {
             display: none !important;
         }
         .page.active {
             display: block !important;
         }
-
         #page-language.active {
             display: flex !important;
             flex-direction: column;
@@ -59,7 +57,6 @@
             justify-content: center;
             height: 60vh;
         }
-
         .lang-buttons {
             display: flex;
             flex-direction: column;
@@ -334,7 +331,7 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     
-                    // Durum kontrolü (Pasifleri atla)
+                    // Pasif ürün kontrolü
                     let status = "";
                     for (let c = 0; c < r.length; c++) {
                         let val = r[c] ? r[c].toString().toLowerCase().trim() : "";
@@ -345,55 +342,48 @@
                     }
                     if (status === "pasif") continue;
 
-                    // Türkçe Veriler (Sabit Güvenli İndeksler: 0: Kategori, 1: Ad, 2: Açıklama, 3: Fiyat)
-                    let catTr = r[0] ? r[0].toString().trim() : "";
-                    let nameTr = r[1] ? r[1].toString().trim() : "";
-                    if (!catTr || !nameTr) continue;
-
-                    let descTr = r[2] ? r[2].toString().trim() : "";
-                    let price = "";
-                    
-                    // Fiyatı bul (içinde rakam ve TL geçen sütun)
-                    for (let c = 0; c < r.length; c++) {
-                        let val = r[c] ? r[c].toString().trim() : "";
-                        if (val !== "" && !isNaN(val) || val.includes("TL") || val.includes("₺")) {
-                            price = val.includes("TL") || val.includes("₺") ? val : val + " TL";
-                            break;
-                        }
-                    }
-                    if (!price && r[3]) price = r[3].toString().trim() + " TL";
-
-                    // Görseli satırda otomatik bulma
+                    // Temel Alanlar (Boşlukları ve kaymaları önlemek için filtrelenmiş metinler)
+                    let textCols = [];
                     let img = "";
+                    let price = "";
+
                     for (let c = 0; c < r.length; c++) {
                         let val = r[c] ? r[c].toString().trim() : "";
+                        if (!val) continue;
+
                         if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg") || val.endsWith(".webp")) {
                             img = val;
-                            break;
+                        } else if (val.includes("TL") || val.includes("₺") || (!isNaN(val) && val.length < 5 && Number(val) > 0)) {
+                            price = val.includes("TL") || val.includes("₺") ? val : val + " TL";
+                        } else if (val.toLowerCase() !== "aktif" && val.toLowerCase() !== "pasif") {
+                            textCols.push(val);
                         }
                     }
 
-                    // İngilizce Veriler (Varsa 5,6,7 yoksa Türkçe yedek)
-                    let catEn = (r[5] && r[5].toString().trim() !== "" && !r[5].toString().includes("http") && !r[5].toString().includes("images/")) ? r[5].toString().trim() : catTr;
-                    let nameEn = (r[6] && r[6].toString().trim() !== "") ? r[6].toString().trim() : nameTr;
-                    let descEn = (r[7] && r[7].toString().trim() !== "" && !r[7].toString().toLowerCase().includes("pasif") && !r[7].toString().toLowerCase().includes("aktif")) ? r[7].toString().trim() : descTr;
+                    if (textCols.length < 2) continue;
 
-                    // Rusça Veriler (Varsa 8,9,10 yoksa Türkçe yedek)
-                    let catRu = (r[8] && r[8].toString().trim() !== "" && !r[8].toString().includes("http") && !r[8].toString().includes("images/")) ? r[8].toString().trim() : catTr;
-                    let nameRu = (r[9] && r[9].toString().trim() !== "") ? r[9].toString().trim() : nameTr;
-                    let descRu = (r[10] && r[10].toString().trim() !== "" && !r[10].toString().toLowerCase().includes("pasif") && !r[10].toString().toLowerCase().includes("aktif")) ? r[10].toString().trim() : descTr;
+                    // Sıralama: İlk metin Kategori, İkinci metin Ürün Adı, Devamı Açıklamalar
+                    let catTr = textCols[0] || "Genel";
+                    let nameTr = textCols[1] || "";
+                    let descTr = textCols[2] || "";
+                    
+                    // İngilizce ve Rusça metinleri kalan sütunlardan güvenli şekilde seç
+                    let descEn = textCols[3] || descTr;
+                    let descRu = textCols[4] || textCols[3] || descTr;
+
+                    if (!nameTr) continue;
 
                     // 1. TÜRKÇE
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // 2. İNGİLİZCE
-                    if (!enCats[catEn]) enCats[catEn] = [];
-                    enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
+                    // 2. İNGİLİZCİ
+                    if (!enCats[catTr]) enCats[catTr] = [];
+                    enCats[catTr].push({ name: nameTr, desc: descEn, price: price, image: img });
 
                     // 3. RUSÇA
-                    if (!ruCats[catRu]) ruCats[catRu] = [];
-                    ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
+                    if (!ruCats[catTr]) ruCats[catTr] = [];
+                    ruCats[catTr].push({ name: nameTr, desc: descRu, price: price, image: img });
                 }
 
                 const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
