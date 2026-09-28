@@ -106,9 +106,11 @@
 
                 let trCats = {}, enCats = {}, ruCats = {};
 
+                // 1. satır başlık olduğu için 1'den başlıyoruz
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     
+                    // Pasif ürün kontrolü (durum sütunu)
                     let status = (r[4] || "").toString().toLowerCase().trim();
                     if (status === 'pasif' || status === 'passive') continue;
 
@@ -122,23 +124,25 @@
 
                     let img = (r[11] || "").toString().trim();
 
+                    // İngilizce
                     let catEn = (r[5] || "").toString().trim() || catTr;
                     let nameEn = (r[6] || "").toString().trim() || nameTr;
                     let descEn = (r[7] || "").toString().trim() || descTr;
 
+                    // Rusça
                     let catRu = (r[8] || "").toString().trim() || catTr;
                     let nameRu = (r[9] || "").toString().trim() || nameTr;
                     let descRu = (r[10] || "").toString().trim() || descTr;
 
-                    // TR
+                    // TR Ekle
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // EN
+                    // EN Ekle
                     if (!enCats[catEn]) enCats[catEn] = [];
                     enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // RU
+                    // RU Ekle
                     if (!ruCats[catRu]) ruCats[catRu] = [];
                     ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
@@ -180,7 +184,7 @@
             container.innerHTML = '';
             const cats = menuData[currentLang].categories;
             if (!cats || cats.length === 0) {
-                container.innerHTML = `<div class="loading-screen">Kategori bulunamadı.</div>`;
+                container.innerHTML = `<div class="loading-screen">Kategori bulunamadı. Lütfen Google Sheets bağlantısını kontrol edin.</div>`;
                 return;
             }
             cats.forEach((cat, index) => {
