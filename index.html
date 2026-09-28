@@ -334,45 +334,64 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     
-                    // Aktiflik Durumu (4. sütun / index 4)
-                    let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
-                    if (status === 'pasif' || status === 'passive') continue;
+                    // Durum kontrolü (Pasifleri atla)
+                    let status = "";
+                    for (let c = 0; c < r.length; c++) {
+                        let val = r[c] ? r[c].toString().toLowerCase().trim() : "";
+                        if (val === "pasif" || val === "passive") {
+                            status = "pasif";
+                            break;
+                        }
+                    }
+                    if (status === "pasif") continue;
 
-                    // Türkçe Veriler (0: Kategori, 1: Ad, 2: Açıklama, 3: Fiyat)
+                    // Türkçe Veriler (Sabit Güvenli İndeksler: 0: Kategori, 1: Ad, 2: Açıklama, 3: Fiyat)
                     let catTr = r[0] ? r[0].toString().trim() : "";
                     let nameTr = r[1] ? r[1].toString().trim() : "";
                     if (!catTr || !nameTr) continue;
 
                     let descTr = r[2] ? r[2].toString().trim() : "";
-                    let price = r[3] ? r[3].toString().trim() + " TL" : "";
+                    let price = "";
+                    
+                    // Fiyatı bul (içinde rakam ve TL geçen sütun)
+                    for (let c = 0; c < r.length; c++) {
+                        let val = r[c] ? r[c].toString().trim() : "";
+                        if (val !== "" && !isNaN(val) || val.includes("TL") || val.includes("₺")) {
+                            price = val.includes("TL") || val.includes("₺") ? val : val + " TL";
+                            break;
+                        }
+                    }
+                    if (!price && r[3]) price = r[3].toString().trim() + " TL";
 
-                    // Görsel Linki (Genellikle 11. sütun veya GitHub resim yolu içeren sütun)
+                    // Görseli satırda otomatik bulma
                     let img = "";
                     for (let c = 0; c < r.length; c++) {
                         let val = r[c] ? r[c].toString().trim() : "";
-                        if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg")) {
+                        if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg") || val.endsWith(".webp")) {
                             img = val;
                             break;
                         }
                     }
 
-                    // 1. TÜRKÇE EKLE
+                    // İngilizce Veriler (Varsa 5,6,7 yoksa Türkçe yedek)
+                    let catEn = (r[5] && r[5].toString().trim() !== "" && !r[5].toString().includes("http") && !r[5].toString().includes("images/")) ? r[5].toString().trim() : catTr;
+                    let nameEn = (r[6] && r[6].toString().trim() !== "") ? r[6].toString().trim() : nameTr;
+                    let descEn = (r[7] && r[7].toString().trim() !== "" && !r[7].toString().toLowerCase().includes("pasif") && !r[7].toString().toLowerCase().includes("aktif")) ? r[7].toString().trim() : descTr;
+
+                    // Rusça Veriler (Varsa 8,9,10 yoksa Türkçe yedek)
+                    let catRu = (r[8] && r[8].toString().trim() !== "" && !r[8].toString().includes("http") && !r[8].toString().includes("images/")) ? r[8].toString().trim() : catTr;
+                    let nameRu = (r[9] && r[9].toString().trim() !== "") ? r[9].toString().trim() : nameTr;
+                    let descRu = (r[10] && r[10].toString().trim() !== "" && !r[10].toString().toLowerCase().includes("pasif") && !r[10].toString().toLowerCase().includes("aktif")) ? r[10].toString().trim() : descTr;
+
+                    // 1. TÜRKÇE
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // 2. İNGİLİZCE EKLE (5: Kategori EN, 6: Ad EN, 7: Açıklama EN - Eğer boşsa Türkçe yedek)
-                    let catEn = (r[5] && r[5].toString().trim() !== "" && !r[5].toString().includes("http")) ? r[5].toString().trim() : catTr;
-                    let nameEn = (r[6] && r[6].toString().trim() !== "") ? r[6].toString().trim() : nameTr;
-                    let descEn = (r[7] && r[7].toString().trim() !== "" && !r[7].toString().toLowerCase().includes("aktif") && !r[7].toString().toLowerCase().includes("pasif")) ? r[7].toString().trim() : descTr;
-
+                    // 2. İNGİLİZCE
                     if (!enCats[catEn]) enCats[catEn] = [];
                     enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // 3. RUSÇA EKLE (8: Kategori RU, 9: Ad RU, 10: Açıklama RU - Eğer boşsa Türkçe yedek)
-                    let catRu = (r[8] && r[8].toString().trim() !== "" && !r[8].toString().includes("http")) ? r[8].toString().trim() : catTr;
-                    let nameRu = (r[9] && r[9].toString().trim() !== "") ? r[9].toString().trim() : nameTr;
-                    let descRu = (r[10] && r[10].toString().trim() !== "" && !r[10].toString().toLowerCase().includes("aktif") && !r[10].toString().toLowerCase().includes("pasif")) ? r[10].toString().trim() : descTr;
-
+                    // 3. RUSÇA
                     if (!ruCats[catRu]) ruCats[catRu] = [];
                     ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
