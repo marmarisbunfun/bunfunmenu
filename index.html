@@ -331,59 +331,49 @@
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     
-                    // Pasif ürün kontrolü
-                    let status = "";
+                    // Pasif ürün kontrolü (Durum sütunu)
+                    let status = r[4] ? r[4].toString().toLowerCase().trim() : '';
+                    if (status === 'pasif' || status === 'passive') continue;
+
+                    // Türkçe Veriler (0: Kategori, 1: Ad, 2: Açıklama)
+                    let catTr = r[0] ? r[0].toString().trim() : "";
+                    let nameTr = r[1] ? r[1].toString().trim() : "";
+                    if (!catTr || !nameTr) continue;
+                    let descTr = r[2] ? r[2].toString().trim() : "";
+                    
+                    // Fiyat (3. Sütun)
+                    let price = r[3] ? r[3].toString().trim() : "";
+                    if (price && !price.includes("TL") && !price.includes("₺")) price += " TL";
+
+                    // Görsel (Satırda resim linki içeren sütunu bul)
+                    let img = "";
                     for (let c = 0; c < r.length; c++) {
-                        let val = r[c] ? r[c].toString().toLowerCase().trim() : "";
-                        if (val === "pasif" || val === "passive") {
-                            status = "pasif";
+                        let val = r[c] ? r[c].toString().trim() : "";
+                        if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg") || val.endsWith(".webp")) {
+                            img = val;
                             break;
                         }
                     }
-                    if (status === "pasif") continue;
 
-                    // Temel Alanlar (Boşlukları ve kaymaları önlemek için filtrelenmiş metinler)
-                    let textCols = [];
-                    let img = "";
-                    let price = "";
+                    // İngilizce Veriler (Tabloda EN sütunları varsa onları al, yoksa Türkçe yedek)
+                    let nameEn = (r[5] && r[5].toString().trim() !== "") ? r[5].toString().trim() : nameTr;
+                    let descEn = (r[6] && r[6].toString().trim() !== "") ? r[6].toString().trim() : descTr;
 
-                    for (let c = 0; c < r.length; c++) {
-                        let val = r[c] ? r[c].toString().trim() : "";
-                        if (!val) continue;
+                    // Rusça Veriler (Tabloda RU sütunları varsa onları al, yoksa Türkçe yedek)
+                    let nameRu = (r[8] && r[8].toString().trim() !== "") ? r[8].toString().trim() : nameTr;
+                    let descRu = (r[9] && r[9].toString().trim() !== "") ? r[9].toString().trim() : descTr;
 
-                        if (val.includes("images/") || val.includes("http") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg") || val.endsWith(".webp")) {
-                            img = val;
-                        } else if (val.includes("TL") || val.includes("₺") || (!isNaN(val) && val.length < 5 && Number(val) > 0)) {
-                            price = val.includes("TL") || val.includes("₺") ? val : val + " TL";
-                        } else if (val.toLowerCase() !== "aktif" && val.toLowerCase() !== "pasif") {
-                            textCols.push(val);
-                        }
-                    }
-
-                    if (textCols.length < 2) continue;
-
-                    // Sıralama: İlk metin Kategori, İkinci metin Ürün Adı, Devamı Açıklamalar
-                    let catTr = textCols[0] || "Genel";
-                    let nameTr = textCols[1] || "";
-                    let descTr = textCols[2] || "";
-                    
-                    // İngilizce ve Rusça metinleri kalan sütunlardan güvenli şekilde seç
-                    let descEn = textCols[3] || descTr;
-                    let descRu = textCols[4] || textCols[3] || descTr;
-
-                    if (!nameTr) continue;
-
-                    // 1. TÜRKÇE
+                    // 1. TÜRKÇE MENÜ
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // 2. İNGİLİZCİ
+                    // 2. İNGİLİZCE MENÜ
                     if (!enCats[catTr]) enCats[catTr] = [];
-                    enCats[catTr].push({ name: nameTr, desc: descEn, price: price, image: img });
+                    enCats[catTr].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // 3. RUSÇA
+                    // 3. RUSÇA MENÜ
                     if (!ruCats[catTr]) ruCats[catTr] = [];
-                    ruCats[catTr].push({ name: nameTr, desc: descRu, price: price, image: img });
+                    ruCats[catTr].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
 
                 const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
