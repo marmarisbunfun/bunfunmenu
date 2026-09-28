@@ -329,10 +329,8 @@
 
                 if (!rows || rows.length < 2) return;
 
-                // Tablonun ilk satırını başlık olarak alıyoruz ki sütun yerleri değişse bile bulabilelim
                 let headers = rows[0].map(h => h ? h.toString().toLowerCase().trim() : "");
                 
-                // Sütun indekslerini akıllıca tespit etme
                 let getColIndex = (keywords) => {
                     for (let keyword of keywords) {
                         let idx = headers.findIndex(h => h.includes(keyword));
@@ -341,7 +339,7 @@
                     return -1;
                 };
 
-                // Türkçe sütunlar
+                // Sütun eşleştirmeleri
                 let iCatTr = getColIndex(["kategori", "category"]);
                 let iNameTr = getColIndex(["ad", "ürün", "name", "urun"]);
                 let iDescTr = getColIndex(["açıklama", "aciklama", "desc"]);
@@ -349,17 +347,15 @@
                 let iStatus = getColIndex(["durum", "status"]);
                 let iImg = getColIndex(["görsel", "gorsel", "image", "foto", "resim"]);
 
-                // İngilizce sütunlar
                 let iCatEn = getColIndex(["en kategori", "category (en)", "english category"]);
                 let iNameEn = getColIndex(["en ad", "name (en)", "english name"]);
                 let iDescEn = getColIndex(["en açıklama", "desc (en)", "english desc"]);
 
-                // Rusça sütunlar
                 let iCatRu = getColIndex(["ru kategori", "category (ru)", "russian category"]);
                 let iNameRu = getColIndex(["ru ad", "name (ru)", "russian name"]);
                 let iDescRu = getColIndex(["ru açıklama", "desc (ru)", "russian desc"]);
 
-                // Eğer sütunlar başlık eşleşmezse eski sabit indekslere yedekle
+                // Yedek indeksler
                 if (iCatTr === -1) iCatTr = 0;
                 if (iNameTr === -1) iNameTr = 1;
                 if (iDescTr === -1) iDescTr = 2;
@@ -381,13 +377,10 @@
                     let descTr = iDescTr !== -1 && r[iDescTr] ? r[iDescTr].toString().trim() : "";
                     let price = iPrice !== -1 && r[iPrice] ? r[iPrice].toString().trim() + " TL" : "";
                     
-                    // Görsel yolunu bulma (boş değilse alır)
+                    // Görsel bulma (Sütunlarda veya satırda arama)
                     let img = "";
-                    if (iImg !== -1 && r[iImg]) {
-                        img = r[iImg].toString().trim();
-                    }
+                    if (iImg !== -1 && r[iImg]) img = r[iImg].toString().trim();
                     if (!img) {
-                        // Eğer standart sütunda yoksa satırdaki herhangi bir resim uzantılı alanı tara
                         for (let c = 0; c < r.length; c++) {
                             let val = r[c] ? r[c].toString().trim() : "";
                             if (val.includes("images/") || val.endsWith(".jpg") || val.endsWith(".png") || val.endsWith(".jpeg")) {
@@ -397,21 +390,45 @@
                         }
                     }
 
-                    // Türkçe veri ekle
+                    // Türkçe
                     if (!trCats[catTr]) trCats[catTr] = [];
                     trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
 
-                    // İngilizce veri ekle (Varsa İngilizce, yoksa Türkçe yedek)
+                    // İngilizce (Eğer İngilizce sütun boşsa veya yoksa tablodaki diğer metin sütunlarından İngilizce olanı bulmaya çalış)
                     let catEn = (iCatEn !== -1 && r[iCatEn]) ? r[iCatEn].toString().trim() : catTr;
                     let nameEn = (iNameEn !== -1 && r[iNameEn]) ? r[iNameEn].toString().trim() : nameTr;
-                    let descEn = (iDescEn !== -1 && r[iDescEn]) ? r[iDescEn].toString().trim() : descTr;
+                    let descEn = (iDescEn !== -1 && r[iDescEn]) ? r[iDescEn].toString().trim() : "";
+                    if (!descEn) {
+                        // Eğer özel İngilizce açıklama sütunu yoksa, tabloda farklı dildeki açıklamayı bul
+                        for (let c = 0; c < r.length; c++) {
+                            let textVal = r[c] ? r[c].toString().trim() : "";
+                            // İngilizce karakter içeren veya Türkçe açıklamadan farklı olan uzun metni al
+                            if (textVal.length > 5 && textVal !== descTr && textVal !== nameTr && !textVal.includes("TL") && !textVal.includes("images/")) {
+                                descEn = textVal;
+                                break;
+                            }
+                        }
+                        if (!descEn) descEn = descTr; // Hiç bulamazsa Türkçe yedek
+                    }
+
                     if (!enCats[catEn]) enCats[catEn] = [];
                     enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
 
-                    // Rusça veri ekle (Varsa Rusça, yoksa Türkçe yedek)
+                    // Rusça
                     let catRu = (iCatRu !== -1 && r[iCatRu]) ? r[iCatRu].toString().trim() : catTr;
                     let nameRu = (iNameRu !== -1 && r[iNameRu]) ? r[iNameRu].toString().trim() : nameTr;
-                    let descRu = (iDescRu !== -1 && r[iDescRu]) ? r[iDescRu].toString().trim() : descTr;
+                    let descRu = (iDescRu !== -1 && r[iDescRu]) ? r[iDescRu].toString().trim() : "";
+                    if (!descRu) {
+                        for (let c = 0; c < r.length; c++) {
+                            let textVal = r[c] ? r[c].toString().trim() : "";
+                            if (textVal.length > 5 && textVal !== descTr && textVal !== descEn && textVal !== nameTr && !textVal.includes("TL") && !textVal.includes("images/")) {
+                                descRu = textVal;
+                                break;
+                            }
+                        }
+                        if (!descRu) descRu = descTr;
+                    }
+
                     if (!ruCats[catRu]) ruCats[catRu] = [];
                     ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
                 }
