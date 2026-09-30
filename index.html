@@ -94,7 +94,6 @@
             ru: { backLang: "Язык", backCat: "Категории", backProd: "Назад к товарам", catTitle: "Категории", soonText: "Фото скоро будут" }
         };
 
-        // CSV verisini düzgün parse eden fonksiyon (hücre içindeki virgülleri karıştırmaz)
         function parseCSV(text) {
             let lines = [];
             let row = [""];
@@ -121,7 +120,6 @@
         async function loadMenuData() {
             if (isDataLoaded) return;
             try {
-                // Doğrudan Google Sheets CSV export linki (CORS engeline takılmaz)
                 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdNmjIQYSsH6Wt1yluSA7KvQhyUhJCpPXB8PKPH2sLF-fxe-vfhGCdw0KVzmWVquyIvcg8iIE_KZa9/pub?output=csv";
                 
                 let response = await fetch(csvUrl);
@@ -132,14 +130,13 @@
 
                 let trCats = {}, enCats = {}, ruCats = {};
 
-                // 1. satır başlık olduğu için 1'den başlıyoruz
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    if (!r || r.length < 5) continue;
+                    if (!r || r.length < 4) continue;
                     
-                    // Durum sütunu (Aktif / Pasif) kontrolü
+                    // Durum sütunu kontrolü (Aktif / Pasif) - Genelde 4. veya uygun indeks
                     let status = (r[4] || "").toString().toLowerCase().trim();
-                    if (status === 'pasif' || status === 'passive' || status === 'iptal') continue;
+                    if (status === 'pasif' || status === 'passive' || status === 'iptal' || status === '0') continue;
 
                     let catTr = (r[0] || "").toString().trim();
                     let nameTr = (r[1] || "").toString().trim();
@@ -151,12 +148,12 @@
 
                     let img = (r[11] || "").toString().trim();
 
-                    // İngilizce
+                    // İngilizce Sütunları (Tablonuzun sırasına göre eşlendi)
                     let catEn = (r[5] || "").toString().trim() || catTr;
                     let nameEn = (r[6] || "").toString().trim() || nameTr;
                     let descEn = (r[7] || "").toString().trim() || descTr;
 
-                    // Rusça
+                    // Rusça Sütunları (Tablonuzun sırasına göre eşlendi)
                     let catRu = (r[8] || "").toString().trim() || catTr;
                     let nameRu = (r[9] || "").toString().trim() || nameTr;
                     let descRu = (r[10] || "").toString().trim() || descTr;
