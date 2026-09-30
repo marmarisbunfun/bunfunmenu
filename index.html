@@ -132,31 +132,32 @@
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
-                    if (!r || r.length < 4) continue;
+                    if (!r || r.length < 6) continue;
                     
-                    // Durum sütunu kontrolü (Aktif / Pasif) - Genelde 4. veya uygun indeks
+                    // E Kolonu (Durum) kontrolü
                     let status = (r[4] || "").toString().toLowerCase().trim();
                     if (status === 'pasif' || status === 'passive' || status === 'iptal' || status === '0') continue;
 
+                    // A Kolonu: Kategori TR, B Kolonu: Ürün Adı TR
                     let catTr = (r[0] || "").toString().trim();
                     let nameTr = (r[1] || "").toString().trim();
                     if (!catTr || !nameTr) continue;
 
+                    // C Kolonu: Açıklama TR, D Kolonu: Fiyat, F Kolonu: Görsel
                     let descTr = (r[2] || "").toString().trim();
                     let price = (r[3] || "").toString().trim();
                     if (price && !price.includes("TL") && !price.includes("₺")) price += " TL";
+                    let img = (r[5] || "").toString().trim();
 
-                    let img = (r[11] || "").toString().trim();
+                    // İngilizce Sütunları (G, H, I -> 6, 7, 8)
+                    let catEn = (r[6] || "").toString().trim() || catTr;
+                    let nameEn = (r[7] || "").toString().trim() || nameTr;
+                    let descEn = (r[8] || "").toString().trim() || descTr;
 
-                    // İngilizce Sütunları (Tablonuzun sırasına göre eşlendi)
-                    let catEn = (r[5] || "").toString().trim() || catTr;
-                    let nameEn = (r[6] || "").toString().trim() || nameTr;
-                    let descEn = (r[7] || "").toString().trim() || descTr;
-
-                    // Rusça Sütunları (Tablonuzun sırasına göre eşlendi)
-                    let catRu = (r[8] || "").toString().trim() || catTr;
-                    let nameRu = (r[9] || "").toString().trim() || nameTr;
-                    let descRu = (r[10] || "").toString().trim() || descTr;
+                    // Rusça Sütunları (J, K, L -> 9, 10, 11)
+                    let catRu = (r[9] || "").toString().trim() || catTr;
+                    let nameRu = (r[10] || "").toString().trim() || nameTr;
+                    let descRu = (r[11] || "").toString().trim() || descTr;
 
                     // TR Ekle
                     if (!trCats[catTr]) trCats[catTr] = [];
