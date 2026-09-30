@@ -12,34 +12,45 @@
         .header-brand { font-size: 28px; font-weight: 700; color: #c73729; letter-spacing: 1px; margin-bottom: 2px; }
         .slogan { font-family: 'Great Vibes', cursive; font-size: 26px; color: #ee8e00; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; width: 100%; flex-grow: 1; }
-        .page { display: none !important; }
-        .page.active { display: block !important; }
-        #page-language.active { display: flex !important; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
+        
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        #page-language.active { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
+        
         .lang-buttons { display: flex; flex-direction: column; gap: 15px; width: 100%; max-width: 280px; }
         .lang-btn { background-color: #ffffff; border: 2px solid #c73729; color: #c73729; padding: 14px 20px; font-size: 17px; font-weight: 600; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; align-items: center; justify-content: center; gap: 12px; }
         .lang-btn span.flag { font-size: 22px; }
         .lang-btn:hover { background-color: #c73729; color: #ffffff; transform: translateY(-2px); }
+        
         .back-bar { margin-bottom: 20px; }
         .back-btn { background: none; border: none; color: #c73729; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+        
         .section-title { font-size: 20px; font-weight: 700; margin-bottom: 15px; color: #222; }
+        
         .category-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .category-card { background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.04); cursor: pointer; font-size: 18px; font-weight: 600; color: #333; display: flex; justify-content: space-between; align-items: center; transition: transform 0.2s; border-left: 5px solid #c73729; }
         .category-card:hover { transform: scale(1.01); }
+        
         .product-list { display: flex; flex-direction: column; gap: 12px; }
         .product-card { background-color: #ffffff; border-radius: 12px; padding: 12px; display: flex; gap: 15px; align-items: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.04); transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-2px); }
+        
         .product-thumb { width: 75px; height: 75px; border-radius: 8px; object-fit: cover; background-color: #eaeaea; flex-shrink: 0; }
-        .product-thumb-placeholder { width: 75px; height: 75px; border-radius: 8px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; color: #777; font-weight: 600; padding: 4px; flex-shrink: 0; line-height: 1.2; }
+        .product-thumb-placeholder { width: 75px; height: 75px; border-radius: 8px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 10px; color: #777; font-weight: 600; padding: 4px; flex-shrink: 0; }
+        
         .product-info { flex-grow: 1; }
         .product-name { font-size: 16px; font-weight: 600; color: #222; margin-bottom: 2px; }
         .product-desc-preview { font-size: 13px; color: #666; margin-bottom: 6px; line-height: 1.4; }
         .product-price { font-size: 15px; font-weight: 700; color: #c73729; }
+        
         .detail-box { background-color: #ffffff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
-        .detail-img { width: 100%; max-height: 250px; object-fit: cover; border-radius: 12px; background-color: #eaeaea; margin-bottom: 20px; }
-        .detail-img-placeholder { width: 100%; height: 180px; border-radius: 12px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #666; font-weight: 600; margin-bottom: 20px; }
-        .detail-title { font-size: 22px; font-weight: 700; color: #222; margin-bottom: 10px; }
-        .detail-desc { font-size: 15px; color: #666; margin-bottom: 20px; line-height: 1.6; }
-        .detail-price { font-size: 24px; font-weight: 700; color: #c73729; }
+        .detail-img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 12px; background-color: #eaeaea; margin-bottom: 20px; }
+        .detail-img-placeholder { width: 100%; height: 200px; border-radius: 12px; background-color: #e5e5e0; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #666; font-weight: 600; margin-bottom: 20px; }
+        .detail-title { font-size: 24px; font-weight: 700; color: #222; margin-bottom: 12px; }
+        .detail-desc { font-size: 16px; color: #666; margin-bottom: 20px; line-height: 1.6; }
+        .detail-price { font-size: 26px; font-weight: 700; color: #c73729; }
+        
         .loading-screen { text-align: center; padding: 40px; font-size: 16px; color: #666; }
     </style>
 </head>
@@ -50,48 +61,53 @@
         <div class="slogan">fun in every bite</div>
     </header>
 
-    <div class="container" id="main-container">
+    <div class="container">
+        <!-- 1. DİL SEÇİMİ SAYFASI -->
         <div id="page-language" class="page active">
             <div class="lang-buttons">
-                <button class="lang-btn" onclick="selectLanguage('tr')"><span class="flag">🇹🇷</span> Türkçe</button>
-                <button class="lang-btn" onclick="selectLanguage('en')"><span class="flag">🇬🇧</span> English</button>
-                <button class="lang-btn" onclick="selectLanguage('ru')"><span class="flag">🇷🇺</span> Русский</button>
+                <button class="lang-btn" onclick="setLanguage('tr')"><span class="flag">🇹🇷</span> Türkçe</button>
+                <button class="lang-btn" onclick="setLanguage('en')"><span class="flag">🇬🇧</span> English</button>
+                <button class="lang-btn" onclick="setLanguage('ru')"><span class="flag">🇷🇺</span> Русский</button>
             </div>
         </div>
 
+        <!-- 2. KATEGORİLER SAYFASI -->
         <div id="page-categories" class="page">
-            <div class="back-bar"><button class="back-btn" onclick="goToPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button></div>
+            <div class="back-bar"><button class="back-btn" onclick="showPage('page-language')">← <span id="txt-back-lang">Dil Seçimi</span></button></div>
             <div class="section-title" id="txt-cat-title">Kategoriler</div>
-            <div id="category-container" class="category-grid"><div class="loading-screen">Menü yükleniyor...</div></div>
+            <div id="category-container" class="category-grid">
+                <div class="loading-screen">Menü yükleniyor...</div>
+            </div>
         </div>
 
+        <!-- 3. ÜRÜNLER LİSTESİ SAYFASI -->
         <div id="page-products" class="page">
-            <div class="back-bar"><button class="back-btn" onclick="goToPage('page-categories')">← <span id="txt-back-cat">Kategoriler</span></button></div>
+            <div class="back-bar"><button class="back-btn" onclick="showPage('page-categories')">← <span id="txt-back-cat">Kategoriler</span></button></div>
             <div class="section-title" id="product-section-title">Ürünler</div>
             <div id="product-container" class="product-list"></div>
         </div>
 
+        <!-- 4. TEKİL ÜRÜN DETAY SAYFASI -->
         <div id="page-detail" class="page">
-            <div class="back-bar"><button class="back-btn" onclick="backToProducts()">← <span id="txt-back-prod">Ürünlere Dön</span></button></div>
+            <div class="back-bar"><button class="back-btn" onclick="backToProducts()"><span id="txt-back-prod">← Ürünlere Dön</span></button></div>
             <div class="detail-box">
                 <div id="detail-img-container"></div>
-                <h2 id="detail-title" class="detail-title">Ürün Adı</h2>
-                <p id="detail-desc" class="detail-desc">Açıklama</p>
-                <div id="detail-price" class="detail-price">0 TL</div>
+                <h2 id="detail-title" class="detail-title"></h2>
+                <p id="detail-desc" class="detail-desc"></p>
+                <div id="detail-price" class="detail-price"></div>
             </div>
         </div>
     </div>
 
     <script>
-        let menuData = { tr: { categories: [] }, en: { categories: [] }, ru: { categories: [] } };
+        let menuData = { tr: [], en: [], ru: [] };
         let currentLang = 'tr';
         let currentCatIndex = 0;
-        let isDataLoaded = false;
 
         const uiTexts = {
-            tr: { backLang: "Dil Seçimi", backCat: "Kategoriler", backProd: "Ürünlere Dön", catTitle: "Kategoriler", soonText: "Görseller Çok Yakında" },
-            en: { backLang: "Language", backCat: "Categories", backProd: "Back to Products", catTitle: "Categories", soonText: "Photos Coming Soon" },
-            ru: { backLang: "Язык", backCat: "Категории", backProd: "Назад к товарам", catTitle: "Категории", soonText: "Фото скоро будут" }
+            tr: { backLang: "Dil Seçimi", backCat: "Kategoriler", backProd: "← Ürünlere Dön", catTitle: "Kategoriler", soonText: "Görsel Hazırlanıyor" },
+            en: { backLang: "Language", backCat: "Categories", backProd: "← Back to Products", catTitle: "Categories", soonText: "Photo Coming Soon" },
+            ru: { backLang: "Язык", backCat: "Категории", backProd: "← Назад к товарам", catTitle: "Категории", soonText: "Фото скоро будет" }
         };
 
         function parseCSV(text) {
@@ -117,110 +133,109 @@
             return lines;
         }
 
-        // Görsel isimlerini senin dosya adlarınla (ekran görüntüsündeki gibi) birebir eşitleyen akıllı motor
-        function slugifyImageName(name) {
-            if (!name) return "";
+        function getImagePath(customImg, productName) {
+            if (customImg && customImg.trim() !== "") {
+                return customImg.trim();
+            }
+            if (!productName) return "";
             let trMap = {'İ': 'i', 'I': 'i', 'ı': 'i', 'Ş': 's', 'ş': 's', 'Ğ': 'g', 'ğ': 'g', 'Ü': 'u', 'ü': 'u', 'Ö': 'o', 'ö': 'o', 'Ç': 'c', 'ç': 'c'};
-            let clean = name.split('').map(char => trMap[char] || char).join('');
-            // Boşlukları ve tüm özel karakterleri yok ederek dosya adını oluşturur (Örn: "Chicken Tenders" -> "chickentenders")
-            clean = clean.toLowerCase().replace(/[^a-z0-9]/g, ''); 
+            let clean = productName.split('').map(char => trMap[char] || char).join('');
+            clean = clean.toLowerCase().replace(/[^a-z0-9]/g, '');
             return "images/" + clean + ".jpg";
         }
 
-        async function loadMenuData() {
-            if (isDataLoaded) return;
+        async function fetchMenu() {
             try {
-                const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdNmjIQYSsH6Wt1yluSA7KvQhyUhJCpPXB8PKPH2sLF-fxe-vfhGCdw0KVzmWVquyIvcg8iIE_KZa9/pub?output=csv";
-                
-                let response = await fetch(csvUrl);
-                let csvText = await response.text();
-                let rows = parseCSV(csvText);
+                // Tarayıcının eski veriyi hafızada tutmasını (cache) engellemek için sonuna saniye ekliyoruz
+                const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdNmjIQYSsH6Wt1yluSA7KvQhyUhJCpPXB8PKPH2sLF-fxe-vfhGCdw0KVzmWVquyIvcg8iIE_KZa9/pub?output=csv&t=" + new Date().getTime();
+                let res = await fetch(csvUrl);
+                let text = await res.text();
+                let rows = parseCSV(text);
 
                 if (!rows || rows.length < 2) return;
 
-                let trCats = {}, enCats = {}, ruCats = {};
+                let trMap = {}, enMap = {}, ruMap = {};
 
                 for (let i = 1; i < rows.length; i++) {
                     let r = rows[i];
                     if (!r || r.length < 4) continue;
-                    
+
+                    // Durum sütunu kontrolü (E Kolonu -> r[4]): Pasif yazılmışsa atla!
                     let status = (r[4] || "").toString().toLowerCase().trim();
-                    if (status === 'pasif' || status === 'passive' || status === 'iptal' || status === '0') continue;
+                    if (status === 'pasif' || status === 'passive' || status === '0') continue;
 
-                    let catTr = (r[0] || "").toString().trim();
-                    let nameTr = (r[1] || "").toString().trim();
-                    if (!catTr || !nameTr) continue;
+                    let cTr = (r[0] || "").toString().trim();
+                    let nTr = (r[1] || "").toString().trim();
+                    if (!cTr || !nTr) continue;
 
-                    let descTr = (r[2] || "").toString().trim();
+                    let dTr = (r[2] || "").toString().trim();
                     let price = (r[3] || "").toString().trim();
                     if (price && !price.includes("TL") && !price.includes("₺")) price += " TL";
+                    
+                    let img = getImagePath(r[5], nTr);
 
-                    // F sütununda görsel adı varsa onu kullan, yoksa akıllı motordan üret
-                    let img = (r[5] || "").toString().trim();
-                    if (!img) {
-                        img = slugifyImageName(nameTr);
-                    }
+                    let cEn = (r[6] || "").toString().trim() || cTr;
+                    let nEn = (r[7] || "").toString().trim() || nTr;
+                    let dEn = (r[8] || "").toString().trim() || dTr;
 
-                    let catEn = (r[6] || "").toString().trim() || catTr;
-                    let nameEn = (r[7] || "").toString().trim() || nameTr;
-                    let descEn = (r[8] || "").toString().trim() || descTr;
+                    let cRu = (r[9] || "").toString().trim() || cTr;
+                    let nRu = (r[10] || "").toString().trim() || nTr;
+                    let dRu = (r[11] || "").toString().trim() || dTr;
 
-                    let catRu = (r[9] || "").toString().trim() || catTr;
-                    let nameRu = (r[10] || "").toString().trim() || nameTr;
-                    let descRu = (r[11] || "").toString().trim() || descTr;
+                    // Kayıtları grupla
+                    if (!trMap[cTr]) trMap[cTr] = [];
+                    trMap[cTr].push({ name: nTr, desc: dTr, price: price, image: img });
 
-                    if (!trCats[catTr]) trCats[catTr] = [];
-                    trCats[catTr].push({ name: nameTr, desc: descTr, price: price, image: img });
+                    if (!enMap[cEn]) enMap[cEn] = [];
+                    enMap[cEn].push({ name: nEn, desc: dEn, price: price, image: img });
 
-                    if (!enCats[catEn]) enCats[catEn] = [];
-                    enCats[catEn].push({ name: nameEn, desc: descEn, price: price, image: img });
-
-                    if (!ruCats[catRu]) ruCats[catRu] = [];
-                    ruCats[catRu].push({ name: nameRu, desc: descRu, price: price, image: img });
+                    if (!ruMap[cRu]) ruMap[cRu] = [];
+                    ruMap[cRu].push({ name: nRu, desc: dRu, price: price, image: img });
                 }
 
-                const formatObj = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
+                const toArr = (obj) => Object.keys(obj).map(k => ({ name: k, products: obj[k] }));
 
-                menuData.tr.categories = formatObj(trCats);
-                menuData.en.categories = formatObj(enCats);
-                menuData.ru.categories = formatObj(ruCats);
-                isDataLoaded = true;
+                menuData.tr = toArr(trMap);
+                menuData.en = toArr(enMap);
+                menuData.ru = toArr(ruMap);
             } catch (e) {
-                console.error("Veri çekme hatası:", e);
+                console.error("Yükleme hatası:", e);
             }
         }
 
-        function goToPage(pageId) {
+        function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.add('active');
+            document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        async function selectLanguage(lang) {
+        async function setLanguage(lang) {
             currentLang = lang;
-            if (!isDataLoaded) await loadMenuData();
+            // Her dil seçiminde veya sayfaya girişte güncel veriyi doğrudan Google'dan çekiyoruz
+            await fetchMenu();
 
-            const t = uiTexts[lang];
+            let t = uiTexts[lang];
             document.getElementById('txt-back-lang').innerText = t.backLang;
             document.getElementById('txt-back-cat').innerText = t.backCat;
             document.getElementById('txt-back-prod').innerText = t.backProd;
             document.getElementById('txt-cat-title').innerText = t.catTitle;
 
             renderCategories();
-            goToPage('page-categories');
+            showPage('page-categories');
         }
 
         function renderCategories() {
-            const container = document.getElementById('category-container');
+            let container = document.getElementById('category-container');
             container.innerHTML = '';
-            const cats = menuData[currentLang].categories;
+            let cats = menuData[currentLang];
+
             if (!cats || cats.length === 0) {
-                container.innerHTML = `<div class="loading-screen">Kategori bulunamadı. Lütfen internet bağlantınızı kontrol edin.</div>`;
+                container.innerHTML = `<div class="loading-screen">Kategori bulunamadı veya bağlantı kurulamadı.</div>`;
                 return;
             }
+
             cats.forEach((cat, index) => {
-                const card = document.createElement('div');
+                let card = document.createElement('div');
                 card.className = 'category-card';
                 card.innerHTML = `<span>${cat.name}</span> <span>→</span>`;
                 card.onclick = () => openCategory(index);
@@ -230,61 +245,63 @@
 
         function openCategory(catIndex) {
             currentCatIndex = catIndex;
-            const cat = menuData[currentLang].categories[catIndex];
-            const t = uiTexts[currentLang];
+            let cat = menuData[currentLang][catIndex];
+            let t = uiTexts[currentLang];
             document.getElementById('product-section-title').innerText = cat.name;
 
-            const container = document.getElementById('product-container');
+            let container = document.getElementById('product-container');
             container.innerHTML = '';
 
-            cat.products.forEach((prod) => {
-                const pCard = document.createElement('div');
-                pCard.className = 'product-card';
-                let thumbHtml = prod.image && prod.image.trim() !== "" ? 
+            cat.products.forEach(prod => {
+                let card = document.createElement('div');
+                card.className = 'product-card';
+                
+                let imgHtml = prod.image ? 
                     `<img class="product-thumb" src="${prod.image}" alt="${prod.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>${t.soonText}</div>';">` : 
                     `<div class="product-thumb-placeholder">${t.soonText}</div>`;
 
-                pCard.innerHTML = `
-                    ${thumbHtml}
+                card.innerHTML = `
+                    ${imgHtml}
                     <div class="product-info">
                         <div class="product-name">${prod.name}</div>
                         <div class="product-desc-preview">${prod.desc}</div>
                         <div class="product-price">${prod.price}</div>
                     </div>
                 `;
-                pCard.onclick = () => openProductDetail(prod);
-                container.appendChild(pCard);
+                card.onclick = () => openDetail(prod);
+                container.appendChild(card);
             });
-            goToPage('page-products');
+
+            showPage('page-products');
         }
 
-        function backToProducts() { openCategory(currentCatIndex); }
+        function openDetail(prod) {
+            let t = uiTexts[currentLang];
+            let imgContainer = document.getElementById('detail-img-container');
+            imgContainer.innerHTML = '';
 
-        function openProductDetail(prod) {
-            const containerEl = document.getElementById('detail-img-container');
-            const t = uiTexts[currentLang];
-            containerEl.innerHTML = '';
-
-            if (prod.image && prod.image.trim() !== "") {
-                const imgEl = document.createElement('img');
-                imgEl.className = 'detail-img';
-                imgEl.src = prod.image;
-                imgEl.alt = prod.name;
-                imgEl.onerror = function() {
-                    containerEl.innerHTML = `<div class="detail-img-placeholder">${t.soonText}</div>`;
+            if (prod.image) {
+                let img = document.createElement('img');
+                img.className = 'detail-img';
+                img.src = prod.image;
+                img.alt = prod.name;
+                img.onerror = function() {
+                    imgContainer.innerHTML = `<div class="detail-img-placeholder">${t.soonText}</div>`;
                 };
-                containerEl.appendChild(imgEl);
+                imgContainer.appendChild(img);
             } else {
-                const placeholderEl = document.createElement('div');
-                placeholderEl.className = 'detail-img-placeholder';
-                placeholderEl.innerText = t.soonText;
-                containerEl.appendChild(placeholderEl);
+                imgContainer.innerHTML = `<div class="detail-img-placeholder">${t.soonText}</div>`;
             }
 
             document.getElementById('detail-title').innerText = prod.name;
             document.getElementById('detail-desc').innerText = prod.desc;
             document.getElementById('detail-price').innerText = prod.price;
-            goToPage('page-detail');
+
+            showPage('page-detail');
+        }
+
+        function backToProducts() {
+            openCategory(currentCatIndex);
         }
     </script>
 </body>
