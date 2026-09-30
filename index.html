@@ -117,11 +117,12 @@
             return lines;
         }
 
-        // Görsel adını Türkçe karakterlerden temizleyip tam relative yola çeviren fonksiyon
+        // Görsel isimlerini senin dosya adlarınla (ekran görüntüsündeki gibi) birebir eşitleyen akıllı motor
         function slugifyImageName(name) {
             if (!name) return "";
             let trMap = {'İ': 'i', 'I': 'i', 'ı': 'i', 'Ş': 's', 'ş': 's', 'Ğ': 'g', 'ğ': 'g', 'Ü': 'u', 'ü': 'u', 'Ö': 'o', 'ö': 'o', 'Ç': 'c', 'ç': 'c'};
             let clean = name.split('').map(char => trMap[char] || char).join('');
+            // Boşlukları ve tüm özel karakterleri yok ederek dosya adını oluşturur (Örn: "Chicken Tenders" -> "chickentenders")
             clean = clean.toLowerCase().replace(/[^a-z0-9]/g, ''); 
             return "images/" + clean + ".jpg";
         }
@@ -154,6 +155,7 @@
                     let price = (r[3] || "").toString().trim();
                     if (price && !price.includes("TL") && !price.includes("₺")) price += " TL";
 
+                    // F sütununda görsel adı varsa onu kullan, yoksa akıllı motordan üret
                     let img = (r[5] || "").toString().trim();
                     if (!img) {
                         img = slugifyImageName(nameTr);
@@ -239,7 +241,7 @@
                 const pCard = document.createElement('div');
                 pCard.className = 'product-card';
                 let thumbHtml = prod.image && prod.image.trim() !== "" ? 
-                    `<img class="product-thumb" src="${prod.image}" alt="${prod.name}">` : 
+                    `<img class="product-thumb" src="${prod.image}" alt="${prod.name}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'product-thumb-placeholder\'>${t.soonText}</div>';">` : 
                     `<div class="product-thumb-placeholder">${t.soonText}</div>`;
 
                 pCard.innerHTML = `
@@ -268,6 +270,9 @@
                 imgEl.className = 'detail-img';
                 imgEl.src = prod.image;
                 imgEl.alt = prod.name;
+                imgEl.onerror = function() {
+                    containerEl.innerHTML = `<div class="detail-img-placeholder">${t.soonText}</div>`;
+                };
                 containerEl.appendChild(imgEl);
             } else {
                 const placeholderEl = document.createElement('div');
