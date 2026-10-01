@@ -146,7 +146,6 @@
 
         async function fetchMenu() {
             try {
-                // Tarayıcının eski veriyi hafızada tutmasını (cache) engellemek için sonuna saniye ekliyoruz
                 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSdNmjIQYSsH6Wt1yluSA7KvQhyUhJCpPXB8PKPH2sLF-fxe-vfhGCdw0KVzmWVquyIvcg8iIE_KZa9/pub?output=csv&t=" + new Date().getTime();
                 let res = await fetch(csvUrl);
                 let text = await res.text();
@@ -160,7 +159,7 @@
                     let r = rows[i];
                     if (!r || r.length < 4) continue;
 
-                    // Durum sütunu kontrolü (E Kolonu -> r[4]): Pasif yazılmışsa atla!
+                    // Durum kontrolü: Eğer "pasif" yazılmışsa ürünü atla. "satışta" veya boşsa göster!
                     let status = (r[4] || "").toString().toLowerCase().trim();
                     if (status === 'pasif' || status === 'passive' || status === '0') continue;
 
@@ -182,7 +181,6 @@
                     let nRu = (r[10] || "").toString().trim() || nTr;
                     let dRu = (r[11] || "").toString().trim() || dTr;
 
-                    // Kayıtları grupla
                     if (!trMap[cTr]) trMap[cTr] = [];
                     trMap[cTr].push({ name: nTr, desc: dTr, price: price, image: img });
 
@@ -211,7 +209,6 @@
 
         async function setLanguage(lang) {
             currentLang = lang;
-            // Her dil seçiminde veya sayfaya girişte güncel veriyi doğrudan Google'dan çekiyoruz
             await fetchMenu();
 
             let t = uiTexts[lang];
